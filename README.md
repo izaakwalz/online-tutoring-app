@@ -12,8 +12,15 @@
 - `cd online-tutoring-app`,
 - `npm install`
 
-## Points to Note:
+#### Admin Endpoints >>>
 
-You are to create endpoints as relevant following the standard API conventions as outlined
-
--`GET/api/v1/admin/subject/`:
+- `PUT/api/v1/admin/makemeadmin` : access private, to make a tutor an admin
+- `POST/api/v1/admin/subject` : access private, to create suject in a category
+- `PUT/api/v1/admin/subject/subjctId` : to up date subject by id
+- `DELETE/api/v1/admin/subject/subjctId` : to up date subject by id
+- `GET/api/v1/admin/tutor` : access private get all tutors
+- `GET/api/v1/admin/tutor/:tutorId` : get tutors by id
+- `PUT/api/v1/admin/tutor/:tutorId` : deactivate a tutor and deny tutor access to all routes
+- `GET/api/v1/admin/lesson` : get all lessons
+- `GET/api/v1/admin/lesson/:lesson` : get lessons by id
+- `POST/api/v1/admin/lesson` : create a lesson
