@@ -1,25 +1,47 @@
 const mongoose = require('mongoose');
 
 const lesson_schema = new mongoose.Schema({
-  name: {
+  title: {
     type: String,
     required: [true, 'Please provide a lesson name'],
     trim: true,
   },
-  time_start: {
+  tutorId: {
+    type: String,
+    required: [true, 'Please provide a tutor email'],
+    lowercase: true,
+    validate: {
+      validator: function (value) {
+        return /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/.test(value); //? email validation
+      },
+      message: 'Please Enter a valid email',
+    },
+  },
+  subject: {
+    type: String,
+    required: true,
+  },
+  category: {
+    type: String,
+    enum: ['primary', 'jss', 'sss'],
+    message: 'Category is either: primary, jss, sss',
+    require: true,
+  },
+  dataUrl: [
+    {
+      type: String, //? url link to file https://
+      required: [true, 'please enter url '],
+    },
+  ],
+  timeStart: {
     type: Date,
     required: [true, 'Please enter starting time'],
+    min: [Date.now, 'Date and time must be in advanced'],
   },
-  time_end: { Date },
-  tutor: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'tutor',
-    required: true,
-  },
-  material: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'material',
-    required: true,
+  timeEnd: {
+    type: Date,
+    required: [true, 'Please enter starting time'],
+    min: [Date.now, 'Date and time must be in advanced'],
   },
   created_at: {
     type: Date,
@@ -27,6 +49,6 @@ const lesson_schema = new mongoose.Schema({
   },
 });
 
-const Lesson = mongoose.model('lesson', lesson_schema);
+Lesson = mongoose.model('lesson', lesson_schema);
 
 module.exports = Lesson;

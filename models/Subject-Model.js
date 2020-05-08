@@ -5,20 +5,19 @@ const subject_schema = new mongoose.Schema({
     type: String,
     required: [true, 'Please provide a subject name'],
     trim: true,
+    unique: true,
   },
   category: {
     type: String,
-    enum: {
-      values: ['primary', 'jss', 'sss'],
-      message: 'Category is either: primary, jss, sss',
-      require: true,
-    },
+    enum: ['primary', 'jss', 'sss'],
+    message: 'Category is either: primary, jss, sss',
+    require: true,
   },
-  material: [
+  data_url: [
     {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'material',
+      type: String, // url link to (pdf)s or video
       required: true,
+      unique: true,
     },
   ],
 });

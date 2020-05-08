@@ -31,14 +31,9 @@ const stundentsSchema = new mongoose.Schema({
   },
   category: {
     type: String,
-    enum: {
-      values: ['primary', 'jss', 'sss'],
-      message: 'Category is either: primary, jss, sss',
-    },
-  },
-  active: {
-    type: Boolean,
-    default: true,
+    enum: ['primary', 'jss', 'sss'],
+    message: 'Category is either: primary, jss, sss',
+    required: [true, 'please select a category'],
   },
   admin: {
     type: Boolean,
@@ -53,3 +48,5 @@ const stundentsSchema = new mongoose.Schema({
 const Stundents = mongoose.model('stundent', stundentsSchema);
 
 module.exports = Stundents;
+
+// lessons: [{ type:mongoose.Schema.Types.ObjectId  }],
