@@ -1,11 +1,9 @@
 const mongoose = require('mongoose');
 
-const subject_schema = new mongoose.Schema({
+const SubjectSchema = new mongoose.Schema({
   name: {
     type: String,
     required: [true, 'Please provide a subject name'],
-    trim: true,
-    unique: true,
   },
   category: {
     type: String,
@@ -13,15 +11,14 @@ const subject_schema = new mongoose.Schema({
     message: 'Category is either: primary, jss, sss',
     require: true,
   },
-  data_url: [
+  dataUrl: [
     {
       type: String, // url link to (pdf)s or video
       required: true,
-      unique: true,
     },
   ],
 });
 
-const Subject = mongoose.model('subject', subject_schema);
+const Subject = mongoose.model('subject', SubjectSchema);
 
 module.exports = Subject;

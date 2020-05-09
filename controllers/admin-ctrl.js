@@ -1,7 +1,6 @@
 const Tutor = require('../models/Tutor-Model');
 const Lesson = require('../models/Lesson-Model');
 const Subject = require('../models/Subject-Model');
-const Stundent = require('../models/Stundent-Model');
 
 // @desc    make a tutor an admin by their email
 // @route   Put /api/v1/admin/maketutoradmin
@@ -38,19 +37,20 @@ exports.createSubject = async (req, res) => {
 
   try {
     //   check if subject exist
-    const is_subject = await Subject.find({ name, category });
+    const is_subject = await Subject.findOne({ name, category });
 
-    if (is_subject)
+    if (is_subject) {
       return res.status(400).json({
         message: `The subject name '${name}' and category  already exist, please enter another subject name`,
       });
-
-    const subject = await Subject.create(name, category, dataUrl);
-    subject.__v = undefined;
-    return res.status(201).json({
-      success: true,
-      data: subject,
-    });
+    } else {
+      const subject = await Subject.create({ name, category, dataUrl });
+      subject.__v = undefined;
+      return res.status(201).json({
+        success: true,
+        data: subject,
+      });
+    }
   } catch (err) {
     console.error(err);
     if (err.name === 'ValidationError') {

@@ -12,7 +12,7 @@
 - `cd online-tutoring-app`,
 - `npm install`
 
-#### Admin Endpoints >>>
+#### Admin Endpoints
 
 - `PUT/api/v1/admin/makemeadmin` : access private, to make a tutor an admin
 - `POST/api/v1/admin/subject` : access private, to create suject in a category
@@ -24,3 +24,8 @@
 - `GET/api/v1/admin/lesson` : get all lessons
 - `GET/api/v1/admin/lesson/:lesson` : get lessons by id
 - `POST/api/v1/admin/lesson` : create a lesson
+
+#### Tutor Endpoints
+
+- `POST/api/v1/tutor/signup`: tutor can sign-up
+- `POST/api/v1/tutor/login`: tutor can log-in
