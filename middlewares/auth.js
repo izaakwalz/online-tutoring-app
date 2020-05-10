@@ -36,8 +36,12 @@ exports.isAuthTutor = (req, res, next) => {
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-    if (decoded.tutor.isAdmin == false) {
-      req.tutor = decoded;
+    if (
+      decoded.tutor.isAdmin == false ||
+      decoded.tutor.isAdmin == true ||
+      decoded.tutor.isActive == true
+    ) {
+      req.tutor = decoded.tutor;
       next();
     } else {
       res
