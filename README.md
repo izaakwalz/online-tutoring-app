@@ -12,9 +12,13 @@
 - `cd online-tutoring-app`,
 - `npm install`
 
-#### Admin Endpoints
+### Admin Endpoints
 
-- `PUT/api/v1/admin/makemeadmin` : access private, to make a tutor an admin
+- `PUT/api/v1/admin/makemeadmin`:
+```bash
+access private, to make a tutor an admin
+REQ.BODY >>> { email }
+```
 - `POST/api/v1/admin/subject` : access private, to create suject in a category
 - `PUT/api/v1/admin/subject/subjctId` : to up date subject by id
 - `DELETE/api/v1/admin/subject/subjctId` : to up date subject by id
