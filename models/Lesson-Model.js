@@ -27,12 +27,10 @@ const lesson_schema = new mongoose.Schema({
     message: 'Category is either: primary, jss, sss',
     require: true,
   },
-  dataUrl: [
-    {
-      type: String, //? url link to file https://
-      required: [true, 'please enter url '],
-    },
-  ],
+  dataUrl: {
+    type: String, // url link to file https://whatever.com
+    required: [true, 'please enter url '],
+  },
   timeStart: {
     type: Date,
     required: [true, 'Please enter starting time'],

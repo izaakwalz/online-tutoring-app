@@ -9,14 +9,16 @@ const {
   registerSubject,
   getSubject,
   updateSubject,
+  deleteSubject,
 } = require('../controllers/tutors-ctrl');
 
 router.route('/signup').post(signup);
 router.route('/login').post(login);
+router.route('/registersubject').post(isAuthTutor, registerSubject);
+router.route('/registered/subject').get(isAuthTutor, getSubject);
 router
-  .route('/register')
-  .get(isAuthTutor, getSubject)
-  .post(isAuthTutor, registerSubject);
-router.route('/register/:subjectId').put(isAuthTutor, updateSubject);
+  .route('/registered/:subjectId')
+  .put(isAuthTutor, updateSubject)
+  .delete(isAuthTutor, deleteSubject);
 
 module.exports = router;

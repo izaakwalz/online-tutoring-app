@@ -11,12 +11,13 @@ const SubjectSchema = new mongoose.Schema({
     message: 'Category is either: primary, jss, sss',
     require: true,
   },
-  dataUrl: [
-    {
-      type: String, // url link to (pdf)s or video
-      required: true,
-    },
-  ],
+  dataUrl: {
+    type: String,
+    required: [
+      true,
+      'please enter a data url, url must be a link: http://whatever.com',
+    ],
+  },
 });
 
 const Subject = mongoose.model('subject', SubjectSchema);

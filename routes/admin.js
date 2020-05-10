@@ -15,25 +15,25 @@ const {
   getLessonById,
 } = require('../controllers/admin-ctrl');
 
-// ? make tutor admin PUT.
+//? make tutor admin PUT.
 router.route('/makemeadmin').put(isAuthAdmin, makeMeAdmin);
 
-//! @subjet route POST,
+// @subjet route POST,
 router.route('/subject').post(isAuthAdmin, createSubject);
-//! @PUT, DELETE
+// PUT, DELETE
 router
   .route('/subject/:subjctId')
   .put(isAuthAdmin, updateSubject)
   .delete(deleteSubject);
 
-//! @tutor route GET, PUT
+// @tutor route GET, PUT
 router.route('/tutor').get(isAuthAdmin, getTutor);
 router
   .route('/tutor/tutorId')
   .get(isAuthAdmin, getTutorById)
   .put(isAuthAdmin, deactivateTutor);
 
-//! lesson
+// lesson
 router
   .route('/lesson')
   .get(isAuthAdmin, getLesson)

@@ -1,14 +1,9 @@
 const mongoose = require('mongoose');
 
 const tutor_schema = new mongoose.Schema({
-  firstname: {
+  name: {
     type: String,
-    required: [true, 'Please enter first name'],
-    trim: true,
-  },
-  lastname: {
-    type: String,
-    required: [true, 'Please enter lastname name'],
+    required: [true, 'Please enter your full name'],
     trim: true,
   },
   email: {

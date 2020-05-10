@@ -41,7 +41,7 @@ exports.createSubject = async (req, res) => {
 
     if (is_subject) {
       return res.status(400).json({
-        message: `The subject name '${name}' and category  already exist, please enter another subject name`,
+        message: `The subject name '${name}' and category '${category}'  already exist, please enter another subject name`,
       });
     } else {
       const subject = await Subject.create({ name, category, dataUrl });
@@ -75,35 +75,42 @@ exports.createSubject = async (req, res) => {
 exports.updateSubject = async (req, res) => {
   const { name, category, dataUrl } = req.body;
   try {
-    const subject = await Subject.findById({ _id: req.params.subjctId });
+    const subject = await Subject.findById({ _id: req.params.subjectId });
 
     if (subject) {
-      let subjectUrl = await Subject.find({ _id: req.params.subjctId }).select({
-        dataUrl: 1,
-      });
-      if (subjectUrl.dataUrl.includes(dataUrl))
-        return res.status(401).json({ error: 'Data url already exists' });
-      await subjectUrl.dataUrl.push(dataUrl);
       await Subject.findOneAndUpdate(
-        { _id: req.params.subjctId },
+        { _id: req.params.subjectId },
         {
           $set: {
             name,
             category,
-            dataUrl: subjectUrl.dataUrl,
+            dataUrl,
           },
-        }
+        },
+        { new: true }
       );
       res.status(201).json({
         success: true,
-        message: 'Subject successfully updated🤗',
-        data: subject,
+        message: 'Subject successfully updated',
       });
     } else {
       res.status(400).json({ success: false, error: 'subject id not valid' });
     }
   } catch (err) {
-    console.error(err), res.status(500).json({ error: 'Server Error' });
+    console.log(err);
+    if (err.name === 'ValidationError') {
+      const messages = Object.values(err.errors).map((val) => val.message);
+      // check fo existing user
+      return res.status(400).json({
+        success: false,
+        error: messages,
+      });
+    } else {
+      return res.status(500).json({
+        success: false,
+        error: 'Server Error',
+      });
+    }
   }
 };
 
@@ -120,7 +127,6 @@ exports.deleteSubject = async (req, res, next) => {
       return res.status(200).json({
         success: true,
         message: 'Subject successfully deleted!',
-        data: {},
       });
     } else {
       return res.status(404).json({
