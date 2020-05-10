@@ -16,13 +16,13 @@ const {
 } = require('../controllers/admin-ctrl');
 
 //? make tutor admin PUT.
-router.route('/makemeadmin').put(isAuthAdmin, makeMeAdmin);
+router.route('/makemeadmin').post(isAuthAdmin, makeMeAdmin);
 
 // @subjet route POST,
 router.route('/subject').post(isAuthAdmin, createSubject);
 // PUT, DELETE
 router
-  .route('/subject/:subjctId')
+  .route('/subject/:subjectId')
   .put(isAuthAdmin, updateSubject)
   .delete(deleteSubject);
 

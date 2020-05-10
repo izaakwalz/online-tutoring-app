@@ -213,10 +213,10 @@ exports.deactivateTutor = async (req, res) => {
 };
 
 // @desc    add a lesson
-// @route   GET /api/v1/admin/lesson/:subjectId
+// @route   POST /api/v1/admin/lesson
 // @access  Private
 exports.createLesson = async (req, res) => {
-  const { tutorId, title, timeStart, timeEnd, dataUrl } = req.body;
+  const { tutorId, title, timeStart, timeEnd, subject, category } = req.body;
   try {
     //? validate start time and end time
     if (
@@ -229,7 +229,10 @@ exports.createLesson = async (req, res) => {
       });
     }
     // ? get subject by category and name and pouplate
-    const is_subject = await Subject.findById(req.params.id).select({ __v: 0 });
+    const is_subject = await Subject.findOne({
+      name: subject,
+      category,
+    }).select({ __v: 0 });
 
     //? check if tutor is valid
     const is_tutor = await Tutor.findOne({ email: tutorId });
@@ -244,7 +247,7 @@ exports.createLesson = async (req, res) => {
         tutorId,
         subject: is_subject.name,
         category: is_subject.category,
-        dataUrl,
+        dataUrl: is_subject.dataUrl,
         timeStart,
         timeEnd,
       });

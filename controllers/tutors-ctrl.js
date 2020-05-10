@@ -3,6 +3,7 @@ const Subject = require('../models/Subject-Model');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
+// @desc genrate token for tutor on login
 const sendToken = (tutor, req, res, next) => {
   const payload = {
     tutor: {
@@ -31,6 +32,9 @@ const sendToken = (tutor, req, res, next) => {
   });
 };
 
+// @desc    sign-up as a tutor
+// @route   Post /api/v1/tutor/signup
+// @access  Public
 exports.signup = async (req, res) => {
   const { name, email, password } = req.body;
 
@@ -80,6 +84,9 @@ exports.signup = async (req, res) => {
   }
 };
 
+// @desc     tutor login route
+// @route   Put /api/v1/tutor/login
+// @access  Public
 exports.login = async (req, res, next) => {
   const { email, password } = req.body;
 
@@ -121,6 +128,9 @@ exports.login = async (req, res, next) => {
   }
 };
 
+// @desc    register subject
+// @route   POST /api/v1/tutor/registersubject
+// @access  Private
 exports.registerSubject = async (req, res) => {
   const { name, category } = req.body;
 
@@ -164,6 +174,9 @@ exports.registerSubject = async (req, res) => {
   }
 };
 
+// @desc    GET subject
+// @route   GET /api/v1/tutor//registered/subject
+// @access  Private
 exports.getSubject = async (req, res) => {
   try {
     const user = req.tutor.id;
@@ -186,10 +199,10 @@ exports.getSubject = async (req, res) => {
     console.error(err.message);
     res.status(500).json({ Error: 'Server Error' });
   }
-}; // @desc    Put update subject // @route   POST /api/v1/admin/subject/:subjctId // @access  Private
+};
 
-// @desc    Put update subject
-// @route   POST /api/v1/admin/subject/:subjctId
+// @desc    update subject
+// @route   PUT /api/v1/tutor/registered/:subjectId
 // @access  Private
 exports.updateSubject = async (req, res) => {
   const { name, category, dataUrl } = req.body;
@@ -233,6 +246,9 @@ exports.updateSubject = async (req, res) => {
   }
 };
 
+// @desc    Dekete subject
+// @route   DELETE /api/v1/tutor/registered/:subjectId
+// @access  Private
 exports.deleteSubject = async (req, res, next) => {
   try {
     const subject = await Subject.findById(req.params.subjectId);
