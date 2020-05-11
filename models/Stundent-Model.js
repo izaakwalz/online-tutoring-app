@@ -1,14 +1,9 @@
 const mongoose = require('mongoose');
 
 const stundentsSchema = new mongoose.Schema({
-  firstname: {
+  name: {
     type: String,
-    required: [true, 'Please enter first name'],
-    trim: true,
-  },
-  lastname: {
-    type: String,
-    required: [true, 'Please enter last name name'],
+    required: [true, 'Please enter your full name'],
     trim: true,
   },
   email: {
@@ -26,7 +21,7 @@ const stundentsSchema = new mongoose.Schema({
   password: {
     type: String,
     required: [true, 'Password is required'],
-    minlength: [6, 'Password must be at leats 6 characters long'],
+    min: 6,
     trim: true,
   },
   category: {
@@ -39,6 +34,11 @@ const stundentsSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  lessons: [{ type: mongoose.Schema.Types.ObjectId, ref: 'lesson' }],
+  active: {
+    type: Boolean,
+    default: true,
+  },
   created_at: {
     type: Date,
     default: Date.now,
@@ -48,5 +48,3 @@ const stundentsSchema = new mongoose.Schema({
 const Stundents = mongoose.model('stundent', stundentsSchema);
 
 module.exports = Stundents;
-
-// lessons: [{ type:mongoose.Schema.Types.ObjectId  }],

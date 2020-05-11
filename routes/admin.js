@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { isAuthAdmin } = require('../middlewares/auth');
+const { isAuthAdmin, isAuthDeactivated } = require('../middlewares/auth');
 
 const {
   makeMeAdmin,
@@ -16,28 +16,30 @@ const {
 } = require('../controllers/admin-ctrl');
 
 //? make tutor admin PUT.
-router.route('/makemeadmin').post(isAuthAdmin, makeMeAdmin);
+router.route('/makemeadmin').post(isAuthAdmin, isAuthDeactivated, makeMeAdmin);
 
 // @subjet route POST,
-router.route('/subject').post(isAuthAdmin, createSubject);
+router.route('/subject').post(isAuthAdmin, isAuthDeactivated, createSubject);
 // PUT, DELETE
 router
   .route('/subject/:subjectId')
-  .put(isAuthAdmin, updateSubject)
-  .delete(deleteSubject);
+  .put(isAuthAdmin, isAuthDeactivated, updateSubject)
+  .delete(isAuthAdmin, isAuthDeactivated, deleteSubject);
 
 // @tutor route GET, PUT
-router.route('/tutor').get(isAuthAdmin, getTutor);
+router.route('/tutor').get(isAuthAdmin, isAuthDeactivated, getTutor);
 router
   .route('/tutor/tutorId')
-  .get(isAuthAdmin, getTutorById)
-  .put(isAuthAdmin, deactivateTutor);
+  .get(isAuthAdmin, isAuthDeactivated, getTutorById)
+  .post(isAuthAdmin, isAuthDeactivated, deactivateTutor);
 
 // lesson
 router
   .route('/lesson')
-  .get(isAuthAdmin, getLesson)
-  .post(isAuthAdmin, createLesson);
-router.route('/lesson/:lessonId').get(isAuthAdmin, getLessonById);
+  .get(isAuthAdmin, isAuthDeactivated, getLesson)
+  .post(isAuthAdmin, isAuthDeactivated, createLesson);
+router
+  .route('/lesson/:lessonId')
+  .get(isAuthAdmin, isAuthDeactivated, getLessonById);
 
 module.exports = router;

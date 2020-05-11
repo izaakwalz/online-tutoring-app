@@ -6,12 +6,13 @@ const jwt = require('jsonwebtoken');
 // @desc genrate token for tutor on login
 const sendToken = (tutor, req, res, next) => {
   const payload = {
-    tutor: {
+    data: {
       id: tutor._id,
       name: tutor.name,
       email: tutor.email,
       isActive: tutor.active,
       isAdmin: tutor.admin,
+      role: 'tutor',
     },
   };
 
@@ -24,7 +25,6 @@ const sendToken = (tutor, req, res, next) => {
     success: true,
     data: {
       id: tutor.id,
-      name: tutor.name,
       email: tutor.email,
       active: tutor.active,
     },
@@ -47,25 +47,33 @@ exports.signup = async (req, res) => {
         error: 'Tutor already exists, please try to login',
       });
     }
-    // @ hash password with bcryptjs
-    const salt = await bcrypt.genSalt(12);
-    const hash_password = await bcrypt.hash(password, salt);
 
-    const tutor = await Tutor.create({
-      name,
-      email,
-      password: hash_password,
-    });
-    tutor;
-    return res.status(200).json({
-      success: true,
-      data: {
-        id: tutor.id,
-        name: tutor.name,
-        email: tutor.email,
-        active: tutor.active,
-      },
-    });
+    // password check length
+    if (password.length < 6) {
+      res
+        .status(400)
+        .json({ warning: 'Password should be at least 6 characters ' });
+    } else {
+      // @ hash password with bcryptjs
+      const salt = await bcrypt.genSalt(12);
+      const hash_password = await bcrypt.hash(password, salt);
+
+      const tutor = await Tutor.create({
+        name,
+        email,
+        password: hash_password,
+      });
+      tutor;
+      return res.status(200).json({
+        success: true,
+        data: {
+          id: tutor.id,
+          name: tutor.name,
+          email: tutor.email,
+          active: tutor.active,
+        },
+      });
+    }
   } catch (err) {
     console.log(err.message);
     if (err.name === 'ValidationError') {
@@ -84,7 +92,7 @@ exports.signup = async (req, res) => {
   }
 };
 
-// @desc     tutor login route
+// @desc    tutor login route
 // @route   Put /api/v1/tutor/login
 // @access  Public
 exports.login = async (req, res, next) => {
@@ -161,7 +169,7 @@ exports.registerSubject = async (req, res) => {
           },
           { new: true }
         );
-        return res.status(200).json({ data: tutor.subjects });
+        return res.status(200).json({ data: tutor });
       }
     } else {
       res.status(400).json({
