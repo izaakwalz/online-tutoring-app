@@ -12,7 +12,9 @@
 - `cd online-tutoring-app`
 - `npm install`
 
-#### Herouk link🌐
+#### Herouk link🌐 [wallexschools](http://wallexschool.herokuapp.com)
+
+- #### http://wallexschool.herokuapp.com
 
 #### Admin login details 👾
 
