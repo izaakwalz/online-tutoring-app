@@ -1,5 +1,6 @@
 const Stundent = require('../models/Stundent-Model');
 const Lesson = require('../models/Lesson-Model');
+const Tutor = require('../models/Tutor-Model');
 const Subject = require('../models/Subject-Model');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
@@ -71,7 +72,6 @@ exports.signup = async (req, res) => {
       // ---> const stundents = await stundent.save();  <-----
     }
   } catch (err) {
-    console.log(err);
     if (err.name === 'ValidationError') {
       const messages = Object.values(err.errors).map((val) => val.message);
       return res.status(400).json({
@@ -118,7 +118,6 @@ exports.login = async (req, res, next) => {
     //  -----> token will be placed in res.header('x-auth-token', token).send(token); <------
     sendToken(stundent, req, res);
   } catch (err) {
-    console.log(err);
     if (err.name === 'ValidationError') {
       const messages = Object.values(err.errors).map((val) => val.message);
       // check fo existing user
@@ -135,12 +134,15 @@ exports.login = async (req, res, next) => {
   }
 };
 
+// @desc    stundent book lesson route
+// @route   post /api/v1/stundent/booklesson
+// @access  private
 exports.bookLesson = async (req, res) => {
   const { title, tutor, subject, category } = req.body;
 
   try {
     const $user = req.stundent.id;
-    console.log($user);
+
     const stundents = await Stundent.findById($user).select({ category: 1 });
     if (stundents.category != category) {
       return res
@@ -151,7 +153,7 @@ exports.bookLesson = async (req, res) => {
     const is_lesson = await Lesson.findOne({ title, subject, tutorId: tutor });
     if (is_lesson) {
       const user = req.stundent.id;
-      console.log(user);
+
       let stundent = await Stundent.findOne({ _id: user });
 
       if (stundent.lessons.includes(is_lesson._id)) {
@@ -176,6 +178,53 @@ exports.bookLesson = async (req, res) => {
       });
     }
   } catch (err) {
-    console.log(err);
+    res.status(400).json({ error: 'Server Error' });
+  }
+};
+
+exports.getTutorsBySubjectCategory = async (req, res) => {
+  const { subject, category } = req.body;
+
+  if (!subject || !category) {
+    return res.status(400).json({ warning: 'please enter all fields' });
+  }
+
+  try {
+    const subjectCategory = await Subject.find({ name: subject, category });
+
+    if (subjectCategory) {
+      let subjects = await Subject.find({ name: subject, category }).select({
+        _id: 1,
+      });
+      subjects = subjects[0]._id;
+      const tutorSubject = await Tutor.find().select({ subjects: 1 });
+
+      let tutors = [];
+      tutorSubject.forEach((subject) => {
+        if (subject.subjects.includes(subjects)) {
+          tutors.push(subject._id);
+        }
+      });
+
+      let count = [];
+
+      for (let i = 0; i < tutors.length; i++) {
+        const tutor = await Tutor.find({ _id: tutors[i] });
+        count.push(tutor[0]);
+      }
+
+      res.status(200).json({
+        success: true,
+        count: count.length,
+        data: count,
+      });
+    } else {
+      res.status(400).json({
+        error:
+          'Subject not found. Please Enusure that you entered the right category and subject',
+      });
+    }
+  } catch (err) {
+    res.status(500).json({ Error: 'Server Error' });
   }
 };

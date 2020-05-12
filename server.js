@@ -6,7 +6,7 @@ const connectDB = require('./config/db');
 dotenv.config({ path: './config/config.env' });
 
 connectDB();
-
+const appApp = require('./routes/general');
 const admin = require('./routes/admin');
 const tutor = require('./routes/tutors');
 const stundent = require('./routes/stundents');
@@ -18,7 +18,7 @@ app.use(express.json());
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
 }
-
+app.use('/api/v1/app', appApp);
 app.use('/api/v1/admin', admin);
 app.use('/api/v1/tutor', tutor);
 app.use('/api/v1/stundent', stundent);

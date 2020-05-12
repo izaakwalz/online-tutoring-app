@@ -45,6 +45,8 @@ const tutor_schema = new mongoose.Schema({
   },
 });
 
+tutor_schema.index({ name: 'text' });
+
 const Tutor = mongoose.model('tutor', tutor_schema);
 
 module.exports = Tutor;

@@ -13,13 +13,19 @@ const {
   createLesson,
   getLesson,
   getLessonById,
+  deleteLesson,
+  updateLesson,
+  delete_subject_by_category,
 } = require('../controllers/admin-ctrl');
 
 //? make tutor admin PUT.
 router.route('/makemeadmin').post(isAuthAdmin, isAuthDeactivated, makeMeAdmin);
 
 // @subjet route POST,
-router.route('/subject').post(isAuthAdmin, isAuthDeactivated, createSubject);
+router
+  .route('/subject')
+  .post(isAuthAdmin, isAuthDeactivated, createSubject)
+  .delete(isAuthAdmin, isAuthDeactivated, delete_subject_by_category);
 // PUT, DELETE
 router
   .route('/subject/:subjectId')
@@ -40,6 +46,8 @@ router
   .post(isAuthAdmin, isAuthDeactivated, createLesson);
 router
   .route('/lesson/:lessonId')
-  .get(isAuthAdmin, isAuthDeactivated, getLessonById);
+  .get(isAuthAdmin, isAuthDeactivated, getLessonById)
+  .put(isAuthAdmin, isAuthDeactivated, updateLesson)
+  .delete(isAuthAdmin, isAuthDeactivated, deleteLesson);
 
 module.exports = router;

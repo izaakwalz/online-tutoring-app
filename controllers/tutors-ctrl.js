@@ -75,7 +75,6 @@ exports.signup = async (req, res) => {
       });
     }
   } catch (err) {
-    console.log(err.message);
     if (err.name === 'ValidationError') {
       const messages = Object.values(err.errors).map((val) => val.message);
       // check fo existing user
@@ -119,7 +118,6 @@ exports.login = async (req, res, next) => {
     // token will be placed in res.header('x-auth-token', token).send(token);
     sendToken(tutor, req, res);
   } catch (err) {
-    console.log(err.message);
     if (err.name === 'ValidationError') {
       const messages = Object.values(err.errors).map((val) => val.message);
       // check fo existing user
@@ -177,7 +175,6 @@ exports.registerSubject = async (req, res) => {
       });
     }
   } catch (err) {
-    console.log(err);
     return res.status(500).json({ Error: 'Server Error' });
   }
 };
@@ -204,7 +201,6 @@ exports.getSubject = async (req, res) => {
       tutor,
     });
   } catch (err) {
-    console.error(err.message);
     res.status(500).json({ Error: 'Server Error' });
   }
 };
@@ -237,7 +233,6 @@ exports.updateSubject = async (req, res) => {
       res.status(400).json({ success: false, error: 'subject id not valid' });
     }
   } catch (err) {
-    console.log(err);
     if (err.name === 'ValidationError') {
       const messages = Object.values(err.errors).map((val) => val.message);
       // check fo existing user
@@ -276,7 +271,6 @@ exports.deleteSubject = async (req, res, next) => {
       });
     }
   } catch (err) {
-    console.log(err);
     return res.status(500).json({
       success: false,
       error: 'Server Error',
