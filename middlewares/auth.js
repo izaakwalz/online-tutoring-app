@@ -1,5 +1,4 @@
 const jwt = require('jsonwebtoken');
-const Tutor = require('../models/Tutor-Model');
 
 exports.isAuthAdmin = (req, res, next) => {
   try {
@@ -8,7 +7,7 @@ exports.isAuthAdmin = (req, res, next) => {
     if (!token)
       return res
         .status(401)
-        .json({ error: 'No access token, permission not granted!' });
+        .json({ message: 'No token, authorization denied' });
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
@@ -17,12 +16,11 @@ exports.isAuthAdmin = (req, res, next) => {
       next();
     } else {
       res
-        .status(400)
+        .status(401)
         .json({ error: 'You are not authorized to view this route' });
     }
   } catch (err) {
-    console.log(err);
-    res.status(400).json({ message: 'Token not valid' });
+    res.status(401).json({ message: 'Token is not valid' });
   }
 };
 
@@ -33,7 +31,7 @@ exports.isAuthTutor = (req, res, next) => {
     if (!token)
       return res
         .status(401)
-        .json({ error: 'No access token, permission not granted!' });
+        .json({ message: 'No token, authorization denied' });
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
@@ -42,12 +40,11 @@ exports.isAuthTutor = (req, res, next) => {
       next();
     } else {
       res
-        .status(400)
+        .status(401)
         .json({ error: 'You are not authorized to view this route' });
     }
   } catch (err) {
-    console.log(err);
-    res.status(400).json({ message: 'Token not valid' });
+    res.status(401).json({ message: 'Token is not valid' });
   }
 };
 
@@ -58,7 +55,7 @@ exports.isAuthStundent = (req, res, next) => {
     if (!token)
       return res
         .status(401)
-        .json({ error: 'No access token, permission not granted!' });
+        .json({ message: 'No token, authorization denied' });
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
@@ -67,12 +64,11 @@ exports.isAuthStundent = (req, res, next) => {
       next();
     } else {
       res
-        .status(400)
+        .status(401)
         .json({ error: 'You are not authorized to view this route' });
     }
   } catch (err) {
-    console.log(err);
-    res.status(400).json({ message: 'Token not valid' });
+    res.status(401).json({ message: 'Token is not valid' });
   }
 };
 
@@ -83,12 +79,11 @@ exports.isAuthDeactivated = async (req, res, next) => {
     if (!token)
       return res
         .status(401)
-        .json({ error: 'No access token, permission not granted!' });
+        .json({ message: 'No token, authorization denied' });
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
     const user = decoded.data.isActive;
-    console.log(user);
     if (user == false) {
       res.status(401).json({
         error:
@@ -97,8 +92,29 @@ exports.isAuthDeactivated = async (req, res, next) => {
     }
     next();
   } catch (err) {
-    console.log(err);
-    res.status(400).json({ Error: 'Server Error' });
+    res.status(401).json({ Error: 'Server Error' });
     process.exit(1);
+  }
+};
+
+exports.isAppAuth = (req, res, next) => {
+  // Get token from header
+  const token = req.header('x-auth-token');
+
+  // Check if not token
+  if (!token) {
+    return res.status(401).json({ message: 'No token, authorization denied' });
+  }
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+    if (decoded.data) {
+      req.user = decoded.data;
+      next();
+    } else {
+      res.status(401).json({ error: 'Please Login to proceed' });
+    }
+  } catch (err) {
+    res.status(401).json({ message: 'Token is not valid' });
   }
 };
