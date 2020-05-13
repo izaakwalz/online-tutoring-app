@@ -24,7 +24,11 @@ app.use('/api/v1/tutor', tutor);
 app.use('/api/v1/stundent', stundent);
 
 app.use('*', (req, res) => {
-  res.status(404).send(' Opps~ this is the end of the world api😬');
+  res
+    .status(404)
+    .send(
+      ' Opps~ this is the end of the world api😬, Please try entring a valid route'
+    );
 });
 
 const PORT = process.env.PORT || 4000;
